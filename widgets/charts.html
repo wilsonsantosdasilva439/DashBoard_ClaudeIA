@@ -11144,6 +11144,31 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 		<!--end::Page Custom Javascript-->
 		<!--end::Javascript-->
+
+		<script>
+		async function carregarNoticias() {
+		  try {
+		    const resposta = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://g1.globo.com/rss/g1/");
+		    const dados = await resposta.json();
+		    const noticias = dados.items.slice(0, 10); // primeiras 10 manchetes
+		    
+		    const widgets = document.querySelectorAll('[id^="kt_charts_widget_"]');
+		    widgets.forEach((widget, i) => {
+		      const tituloEl = widget.querySelector(".card-title, .text-gray-800, .fw-bold");
+		      const conteudoEl = widget.querySelector(".card-body, .fs-6, .text-gray-600");
+		      if (noticias[i]) {
+		        if (tituloEl) tituloEl.textContent = noticias[i].title;
+		        if (conteudoEl) conteudoEl.textContent = noticias[i].description;
+		      }
+		    });
+		  } catch (erro) {
+		    console.error("Erro ao carregar notícias:", erro);
+		  }
+		}
+		carregarNoticias();
+		</script>
+
+		
 	</body>
 	<!--end::Body-->
 </html>
